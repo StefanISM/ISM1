@@ -122,7 +122,7 @@ data.m2_1.marker2(:,2) = coeff(:,1);
 
 [~, coeff] = pca(marker3.d);
 data.m2_1.marker3 = (marker3.t - marker3.t(1)) / MESSFREQUENZ_HZ;
-data.m2_1.marker3(:,2) = -coeff(:,1);
+data.m2_1.marker3(:,2) = coeff(:,1);
 
 %% 
 
