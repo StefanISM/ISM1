@@ -38,7 +38,8 @@ while (i<=1)
         %Expand the .mat file
         mObj = matfile('markers');
         mObj.Properties.Writable=true;
-        mObj.markersSave( : , end+1:end+length(markersSave) ) = markersSave;
+        sizeMarkers = size(mObj, 'markersSave');
+        mObj.markersSave( : , sizeMarkers(2)+1:sizeMarkers(2)+length(markersSave) ) = markersSave;
     end
     k=0;    
 end

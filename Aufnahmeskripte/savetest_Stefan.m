@@ -19,5 +19,6 @@ t(1).t=t2;
 t(1).d=d2;
 t(2).t=t1;
 t(2).d=d1;
-mObj.t(:,end+1:end+length(t)) = t;
+sizeT = size(mObj, 't');
+mObj.t(:,sizeT(2)+1:sizeT(2)+length(t)) = t;
 
