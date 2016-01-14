@@ -1,6 +1,6 @@
 
 
-MESSFREQUENZ_HZ = 26;
+MESSFREQUENZ_HZ = 1000;
 %% 
 
 load('.\Aufnahmen\markers - Hanna.mat')
