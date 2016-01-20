@@ -1,6 +1,58 @@
 
 
-MESSFREQUENZ_HZ = 1000;
+%% 
+MESSFREQUENZ_HZ=335;
+load('.\Michi.mat')
+
+marker1 = struct;
+marker2 = struct;
+marker3 = struct;
+
+markerPoints = size(Michi);
+
+marker1.t = zeros(markerPoints(1), 1);
+marker1.d = zeros(markerPoints(1), 3);
+
+marker2.t = zeros(markerPoints(1), 1);
+marker2.d = zeros(markerPoints(1), 3);
+
+marker3.t = zeros(markerPoints(1), 1);
+marker3.d = zeros(markerPoints(1), 3);
+
+
+for k = 1:markerPoints(1)
+    if (Michi{k,9}==Michi{k,10} && Michi{k,2}==0)
+    marker1.t(k) = hex2dec(Michi{k,1}(3:end));
+    marker1.d(k,:) = [Michi{k,3},Michi{k,4},Michi{k,5}];
+    
+    elseif (Michi{k,9}==Michi{k,10} && Michi{k,2}==1)
+    marker2.t(k) = hex2dec(Michi{k,1}(3:end));
+    marker2.d(k,:) = [Michi{k,3},Michi{k,4},Michi{k,5}];
+    
+    elseif(Michi{k,9}==Michi{k,10} && Michi{k,2}==2)
+     marker3.t(k) = hex2dec(Michi{k,1}(3:end));
+    marker3.d(k,:) = [Michi{k,3},Michi{k,4},Michi{k,5}];
+    end
+end
+%%
+
+%ToDo: Nullzeilen löschen!
+
+[~, coeff] = pca(marker1.d);
+data.f1.marker1 = (marker1.t - marker1.t(1)) / MESSFREQUENZ_HZ;
+data.f1.marker1(:,2) = coeff(:,1);
+
+[~, coeff] = pca(marker2.d);
+data.f1.marker2 = (marker2.t - marker2.t(1)) / MESSFREQUENZ_HZ;
+data.f1.marker2(:,2) = coeff(:,1);
+
+[~, coeff] = pca(marker3.d);
+data.f1.marker3 = (marker3.t - marker3.t(1)) / MESSFREQUENZ_HZ;
+data.f1.marker3(:,2) = coeff(:,1);
+
+
+
+
 %% 
 
 load('.\Aufnahmen\markers - Hanna.mat')
