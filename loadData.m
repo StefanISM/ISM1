@@ -20,18 +20,62 @@ marker3.t = zeros(markerPoints(1), 1);
 marker3.d = zeros(markerPoints(1), 3);
 
 
+clear windowOld;
+clear windowData;
 for k = 1:markerPoints(1)
-    if (Michi{k,9}==Michi{k,10} && Michi{k,2}==0)
-        marker1.t(k) = hex2dec(Michi{k,1}(3:end));
-        marker1.d(k,:) = [Michi{k,3},Michi{k,4},Michi{k,5}];
     
-    elseif (Michi{k,9}==Michi{k,10} && Michi{k,2}==1)
-        marker2.t(k) = hex2dec(Michi{k,1}(3:end));
-        marker2.d(k,:) = [Michi{k,3},Michi{k,4},Michi{k,5}];
-    
-    elseif(Michi{k,9}==Michi{k,10} && Michi{k,2}==2)
-        marker3.t(k) = hex2dec(Michi{k,1}(3:end));
-        marker3.d(k,:) = [Michi{k,3},Michi{k,4},Michi{k,5}];
+    if (~exist('windowData') )
+        windowData = Michi(k,:);
+    else
+        windowSize = size(windowData);
+        if (windowData{1,1} == Michi{k,1})
+            windowData(windowSize(1)+1,:) = Michi(k,:);
+        else
+            if ~exist('windowOld')
+                
+                for l = 1:windowSize(1)
+                    if ( windowData{l,2} == 0)
+                        marker1.t(k-windowSize(1)+l-1) = hex2dec(windowData{l,1}(3:end));
+                        marker1.d(k-windowSize(1)+l-1,:) = [windowData{l,3},windowData{l,4},windowData{l,5}];
+
+                    elseif (  windowData{l,2} == 1 )
+                        marker2.t(k-windowSize(1)+l-1) = hex2dec(windowData{l,1}(3:end));
+                        marker2.d(k-windowSize(1)+l-1,:) = [windowData{l,3},windowData{l,4},windowData{l,5}];
+
+                    elseif(windowData{l,2} == 2)
+                        marker3.t(k-windowSize(1)+l-1) = hex2dec(windowData{l,1}(3:end));
+                        marker3.d(k-windowSize(1)+l-1,:) = [windowData{l,3},windowData{l,4},windowData{l,5}];
+                    end
+                    
+                end
+                goodIndices = 1:3;
+            else
+                %Compare new with old
+                oldSize = size(windowOld);
+                for l = 1:oldSize(1)
+                    
+                    [~, index] = min(abs([windowData{:,3}] - [windowOld{l,3}]) + abs([windowData{:,4}] - [windowOld{l,4}]) + abs([windowData{:,5}] - [windowOld{l,5}]));
+                    goodIndices(l) = index;
+                    
+                    if l == 1
+                        marker1.t(k-oldSize(1)+l-1) = hex2dec(windowData{index,1}(3:end));
+                        marker1.d(k-oldSize(1)+l-1,:) = [windowData{index,3},windowData{index,4},windowData{index,5}];
+                    elseif l==2
+                        marker2.t(k-oldSize(1)+l-1) = hex2dec(windowData{index,1}(3:end));
+                        marker2.d(k-oldSize(1)+l-1,:) = [windowData{index,3},windowData{index,4},windowData{index,5}];
+                    
+                    elseif l==3
+                        marker3.t(k-oldSize(1)+l-1) = hex2dec(windowData{index,1}(3:end));
+                        marker3.d(k-oldSize(1)+l-1,:) = [windowData{index,3},windowData{index,4},windowData{index,5}];
+                
+                    end
+                end
+            end
+            
+            %just the good ones
+            windowOld = windowData(goodIndices,:);
+            windowData = Michi(k,:);
+        end
     end
 end
 %%
@@ -118,6 +162,8 @@ data.m2.marker3(:,2) = coeff(:,1);
 clear Tim
 %% 
 
+clear windowData
+MESSFREQUENZ_HZ = 1e6;
 load('.\AufnahmenNeu\Stefan.mat')
 
 marker1 = struct;
@@ -135,19 +181,62 @@ marker2.d = zeros(markerPoints(1), 3);
 marker3.t = zeros(markerPoints(1), 1);
 marker3.d = zeros(markerPoints(1), 3);
 
-
+clear windowOld;
+clear windowData;
 for k = 1:markerPoints(1)
-    if (Stefan{k,2}==0)
-        marker1.t(k) = hex2dec(Stefan{k,1}(3:end));
-        marker1.d(k,:) = [Stefan{k,3},Stefan{k,4},Stefan{k,5}];
     
-    elseif ( Stefan{k,2}==1)
-        marker2.t(k) = hex2dec(Stefan{k,1}(3:end));
-        marker2.d(k,:) = [Stefan{k,3},Stefan{k,4},Stefan{k,5}];
-    
-    elseif(Stefan{k,2}==2)
-        marker3.t(k) = hex2dec(Stefan{k,1}(3:end));
-        marker3.d(k,:) = [Stefan{k,3},Stefan{k,4},Stefan{k,5}];
+    if (~exist('windowData') )
+        windowData = Stefan(k,:);
+    else
+        windowSize = size(windowData);
+        if (windowData{1,1} == Stefan{k,1})
+            windowData(windowSize(1)+1,:) = Stefan(k,:);
+        else
+            if ~exist('windowOld')
+                
+                for l = 1:windowSize(1)
+                    if ( windowData{l,2} == 0)
+                        marker1.t(k-windowSize(1)+l-1) = hex2dec(windowData{l,1}(3:end));
+                        marker1.d(k-windowSize(1)+l-1,:) = [windowData{l,3},windowData{l,4},windowData{l,5}];
+
+                    elseif (  windowData{l,2} == 1 )
+                        marker2.t(k-windowSize(1)+l-1) = hex2dec(windowData{l,1}(3:end));
+                        marker2.d(k-windowSize(1)+l-1,:) = [windowData{l,3},windowData{l,4},windowData{l,5}];
+
+                    elseif(windowData{l,2} == 2)
+                        marker3.t(k-windowSize(1)+l-1) = hex2dec(windowData{l,1}(3:end));
+                        marker3.d(k-windowSize(1)+l-1,:) = [windowData{l,3},windowData{l,4},windowData{l,5}];
+                    end
+                    
+                end
+                goodIndices = 1:3;
+            else
+                %Compare new with old
+                oldSize = size(windowOld);
+                for l = 1:oldSize(1)
+                    
+                    [~, index] = min(abs([windowData{:,3}] - [windowOld{l,3}]) + abs([windowData{:,4}] - [windowOld{l,4}]) + abs([windowData{:,5}] - [windowOld{l,5}]));
+                    goodIndices(l) = index;
+                    
+                    if l == 1
+                        marker1.t(k-oldSize(1)+l-1) = hex2dec(windowData{index,1}(3:end));
+                        marker1.d(k-oldSize(1)+l-1,:) = [windowData{index,3},windowData{index,4},windowData{index,5}];
+                    elseif l==2
+                        marker2.t(k-oldSize(1)+l-1) = hex2dec(windowData{index,1}(3:end));
+                        marker2.d(k-oldSize(1)+l-1,:) = [windowData{index,3},windowData{index,4},windowData{index,5}];
+                    
+                    elseif l==3
+                        marker3.t(k-oldSize(1)+l-1) = hex2dec(windowData{index,1}(3:end));
+                        marker3.d(k-oldSize(1)+l-1,:) = [windowData{index,3},windowData{index,4},windowData{index,5}];
+                
+                    end
+                end
+            end
+            
+            %just the good ones
+            windowOld = windowData(goodIndices,:);
+            windowData = Stefan(k,:);
+        end
     end
 end
 %%
@@ -173,9 +262,9 @@ data.m3.marker2(:,2) = coeff(:,1);
 data.m3.marker3 = (marker3.t - marker3.t(1)) / MESSFREQUENZ_HZ;
 data.m3.marker3(:,2) = coeff(:,1);
 
-clear Stefan
+%clear Stefan
 %% 
-
+MESSFREQUENZ_HZ = 1e6;
 load('.\AufnahmenNeu\StefanReferenz.mat')
 
 marker1 = struct;
@@ -194,18 +283,62 @@ marker3.t = zeros(markerPoints(1), 1);
 marker3.d = zeros(markerPoints(1), 3);
 
 
+clear windowOld;
+clear windowData;
 for k = 1:markerPoints(1)
-    if (StefanReferenz{k,2}==0)
-        marker1.t(k) = hex2dec(StefanReferenz{k,1}(3:end));
-        marker1.d(k,:) = [StefanReferenz{k,3},StefanReferenz{k,4},StefanReferenz{k,5}];
     
-    elseif (StefanReferenz{k,2}==1)
-        marker2.t(k) = hex2dec(StefanReferenz{k,1}(3:end));
-        marker2.d(k,:) = [StefanReferenz{k,3},StefanReferenz{k,4},StefanReferenz{k,5}];
-    
-    elseif(StefanReferenz{k,2}==2)
-        marker3.t(k) = hex2dec(StefanReferenz{k,1}(3:end));
-        marker3.d(k,:) = [StefanReferenz{k,3},StefanReferenz{k,4},StefanReferenz{k,5}];
+    if (~exist('windowData') )
+        windowData = StefanReferenz(k,:);
+    else
+        windowSize = size(windowData);
+        if (windowData{1,1} == StefanReferenz{k,1})
+            windowData(windowSize(1)+1,:) = StefanReferenz(k,:);
+        else
+            if ~exist('windowOld')
+                
+                for l = 1:windowSize(1)
+                    if ( windowData{l,2} == 0)
+                        goodIndices(1) = l;
+                        marker1.t(k-windowSize(1)+l-1) = hex2dec(windowData{l,1}(3:end));
+                        marker1.d(k-windowSize(1)+l-1,:) = [windowData{l,3},windowData{l,4},windowData{l,5}];
+
+                    elseif (  windowData{l,2} == 3 )
+                        marker2.t(k-windowSize(1)+l-1) = hex2dec(windowData{l,1}(3:end));
+                        marker2.d(k-windowSize(1)+l-1,:) = [windowData{l,3},windowData{l,4},windowData{l,5}];
+                        goodIndices(2) = l;
+                    elseif(windowData{l,2} == 4)
+                        marker3.t(k-windowSize(1)+l-1) = hex2dec(windowData{l,1}(3:end));
+                        marker3.d(k-windowSize(1)+l-1,:) = [windowData{l,3},windowData{l,4},windowData{l,5}];
+                        goodIndices(3) = l;
+                    end                    
+                end
+            else
+                %Compare new with old
+                oldSize = size(windowOld);
+                for l = 1:oldSize(1)
+                    
+                    [~, index] = min(abs([windowData{:,3}] - [windowOld{l,3}]) + abs([windowData{:,4}] - [windowOld{l,4}]) + abs([windowData{:,5}] - [windowOld{l,5}]));
+                    goodIndices(l) = index;
+                    
+                    if l == 1
+                        marker1.t(k-oldSize(1)+l-1) = hex2dec(windowData{index,1}(3:end));
+                        marker1.d(k-oldSize(1)+l-1,:) = [windowData{index,3},windowData{index,4},windowData{index,5}];
+                    elseif l==2
+                        marker2.t(k-oldSize(1)+l-1) = hex2dec(windowData{index,1}(3:end));
+                        marker2.d(k-oldSize(1)+l-1,:) = [windowData{index,3},windowData{index,4},windowData{index,5}];
+                    
+                    elseif l==3
+                        marker3.t(k-oldSize(1)+l-1) = hex2dec(windowData{index,1}(3:end));
+                        marker3.d(k-oldSize(1)+l-1,:) = [windowData{index,3},windowData{index,4},windowData{index,5}];
+                
+                    end
+                end
+            end
+            
+            %just the good ones
+            windowOld = windowData(goodIndices,:);
+            windowData = StefanReferenz(k,:);
+        end
     end
 end
 %%
