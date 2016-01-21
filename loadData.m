@@ -1,8 +1,8 @@
 
-
+MESSFREQUENZ_HZ=1e6;
 %% 
-MESSFREQUENZ_HZ=1;
-load('.\Michi.mat')
+
+load('.\AufnahmenNeu\Michi.mat')
 
 marker1 = struct;
 marker2 = struct;
@@ -57,214 +57,181 @@ data.m1.marker2(:,2) = coeff(:,1);
 data.m1.marker3 = (marker3.t - marker3.t(1)) / MESSFREQUENZ_HZ;
 data.m1.marker3(:,2) = coeff(:,1);
 
-
-
-
+clear Michi
 %% 
 
-load('.\Aufnahmen\markers - Hanna.mat')
+load('.\AufnahmenNeu\Tim.mat')
 
 marker1 = struct;
 marker2 = struct;
 marker3 = struct;
 
-marker1.t = zeros(length(markersSave), 1);
-marker1.d = zeros(length(markersSave), 3);
+markerPoints = size(Tim);
 
-marker2.t = zeros(length(markersSave), 1);
-marker2.d = zeros(length(markersSave), 3);
+marker1.t = zeros(markerPoints(1), 1);
+marker1.d = zeros(markerPoints(1), 3);
 
-marker3.t = zeros(length(markersSave), 1);
-marker3.d = zeros(length(markersSave), 3);
+marker2.t = zeros(markerPoints(1), 1);
+marker2.d = zeros(markerPoints(1), 3);
+
+marker3.t = zeros(markerPoints(1), 1);
+marker3.d = zeros(markerPoints(1), 3);
 
 
-for k = 1:length(markersSave)
-    marker1.t(k) = markersSave(k).timestamp;
-    marker1.d(k,:) = markersSave(k).markers(1,:);
+for k = 1:markerPoints(1)
+    if (Tim{k,9}==Tim{k,10} && Tim{k,2}==0)
+        marker1.t(k) = hex2dec(Tim{k,1}(3:end));
+        marker1.d(k,:) = [Tim{k,3},Tim{k,4},Tim{k,5}];
     
-    marker2.t(k) = markersSave(k).timestamp;
-    marker2.d(k,:) = markersSave(k).markers(2,:);
+    elseif (Tim{k,9}==Tim{k,10} && Tim{k,2}==1)
+        marker2.t(k) = hex2dec(Tim{k,1}(3:end));
+        marker2.d(k,:) = [Tim{k,3},Tim{k,4},Tim{k,5}];
     
-    marker3.t(k) = markersSave(k).timestamp;
-    marker3.d(k,:) = markersSave(k).markers(3,:);
+    elseif(Tim{k,9}==Tim{k,10} && Tim{k,2}==2)
+        marker3.t(k) = hex2dec(Tim{k,1}(3:end));
+        marker3.d(k,:) = [Tim{k,3},Tim{k,4},Tim{k,5}];
+    end
 end
+%%
+marker1.d(~any(marker1.d,2),:) = [];
+marker2.d(~any(marker2.d,2),:) = [];
+marker3.d(~any(marker3.d,2),:) = [];
+
+marker1.t(~any(marker1.t,2),:) = [];
+marker2.t(~any(marker2.t,2),:) = [];
+marker3.t(~any(marker3.t,2),:) = [];
+
+
 
 [~, coeff] = pca(marker1.d);
-data.f1.marker1 = (marker1.t - marker1.t(1)) / MESSFREQUENZ_HZ;
-data.f1.marker1(:,2) = coeff(:,1);
+data.m2.marker1 = (marker1.t - marker1.t(1)) / MESSFREQUENZ_HZ;
+data.m2.marker1(:,2) = coeff(:,1);
 
 [~, coeff] = pca(marker2.d);
-data.f1.marker2 = (marker2.t - marker2.t(1)) / MESSFREQUENZ_HZ;
-data.f1.marker2(:,2) = coeff(:,1);
+data.m2.marker2 = (marker2.t - marker2.t(1)) / MESSFREQUENZ_HZ;
+data.m2.marker2(:,2) = coeff(:,1);
 
 [~, coeff] = pca(marker3.d);
-data.f1.marker3 = (marker3.t - marker3.t(1)) / MESSFREQUENZ_HZ;
-data.f1.marker3(:,2) = coeff(:,1);
+data.m2.marker3 = (marker3.t - marker3.t(1)) / MESSFREQUENZ_HZ;
+data.m2.marker3(:,2) = coeff(:,1);
 
+clear Tim
 %% 
 
-load('.\Aufnahmen\markers - Michi.mat')
+load('.\AufnahmenNeu\Stefan.mat')
 
 marker1 = struct;
 marker2 = struct;
 marker3 = struct;
 
-marker1.t = zeros(length(markersSave), 1);
-marker1.d = zeros(length(markersSave), 3);
+markerPoints = size(Stefan);
 
-marker2.t = zeros(length(markersSave), 1);
-marker2.d = zeros(length(markersSave), 3);
+marker1.t = zeros(markerPoints(1), 1);
+marker1.d = zeros(markerPoints(1), 3);
 
-marker3.t = zeros(length(markersSave), 1);
-marker3.d = zeros(length(markersSave), 3);
+marker2.t = zeros(markerPoints(1), 1);
+marker2.d = zeros(markerPoints(1), 3);
+
+marker3.t = zeros(markerPoints(1), 1);
+marker3.d = zeros(markerPoints(1), 3);
 
 
-for k = 1:length(markersSave)
-    marker1.t(k) = markersSave(k).timestamp;
-    marker1.d(k,:) = markersSave(k).markers(1,:);
+for k = 1:markerPoints(1)
+    if (Stefan{k,2}==0)
+        marker1.t(k) = hex2dec(Stefan{k,1}(3:end));
+        marker1.d(k,:) = [Stefan{k,3},Stefan{k,4},Stefan{k,5}];
     
-    marker2.t(k) = markersSave(k).timestamp;
-    marker2.d(k,:) = markersSave(k).markers(2,:);
+    elseif ( Stefan{k,2}==1)
+        marker2.t(k) = hex2dec(Stefan{k,1}(3:end));
+        marker2.d(k,:) = [Stefan{k,3},Stefan{k,4},Stefan{k,5}];
     
-    marker3.t(k) = markersSave(k).timestamp;
-    marker3.d(k,:) = markersSave(k).markers(3,:);
+    elseif(Stefan{k,2}==2)
+        marker3.t(k) = hex2dec(Stefan{k,1}(3:end));
+        marker3.d(k,:) = [Stefan{k,3},Stefan{k,4},Stefan{k,5}];
+    end
 end
+%%
+marker1.d(~any(marker1.d,2),:) = [];
+marker2.d(~any(marker2.d,2),:) = [];
+marker3.d(~any(marker3.d,2),:) = [];
+
+marker1.t(~any(marker1.t,2),:) = [];
+marker2.t(~any(marker2.t,2),:) = [];
+marker3.t(~any(marker3.t,2),:) = [];
+
+
 
 [~, coeff] = pca(marker1.d);
-data.m1.marker1 = (marker1.t - marker1.t(1)) / MESSFREQUENZ_HZ;
-data.m1.marker1(:,2) = coeff(:,1);
+data.m3.marker1 = (marker1.t - marker1.t(1)) / MESSFREQUENZ_HZ;
+data.m3.marker1(:,2) = coeff(:,1);
 
 [~, coeff] = pca(marker2.d);
-data.m1.marker2 = (marker2.t - marker2.t(1)) / MESSFREQUENZ_HZ;
-data.m1.marker2(:,2) = coeff(:,1);
+data.m3.marker2 = (marker2.t - marker2.t(1)) / MESSFREQUENZ_HZ;
+data.m3.marker2(:,2) = coeff(:,1);
 
 [~, coeff] = pca(marker3.d);
-data.m1.marker3 = (marker3.t - marker3.t(1)) / MESSFREQUENZ_HZ;
-data.m1.marker3(:,2) = coeff(:,1);
+data.m3.marker3 = (marker3.t - marker3.t(1)) / MESSFREQUENZ_HZ;
+data.m3.marker3(:,2) = coeff(:,1);
 
+clear Stefan
 %% 
 
-load('.\Aufnahmen\markers - Stefan.mat')
+load('.\AufnahmenNeu\StefanReferenz.mat')
 
 marker1 = struct;
 marker2 = struct;
 marker3 = struct;
 
-marker1.t = zeros(length(markersSave), 1);
-marker1.d = zeros(length(markersSave), 3);
+markerPoints = size(StefanReferenz);
 
-marker2.t = zeros(length(markersSave), 1);
-marker2.d = zeros(length(markersSave), 3);
+marker1.t = zeros(markerPoints(1), 1);
+marker1.d = zeros(markerPoints(1), 3);
 
-marker3.t = zeros(length(markersSave), 1);
-marker3.d = zeros(length(markersSave), 3);
+marker2.t = zeros(markerPoints(1), 1);
+marker2.d = zeros(markerPoints(1), 3);
+
+marker3.t = zeros(markerPoints(1), 1);
+marker3.d = zeros(markerPoints(1), 3);
 
 
-for k = 1:length(markersSave)
-    marker1.t(k) = markersSave(k).timestamp;
-    marker1.d(k,:) = markersSave(k).markers(1,:);
+for k = 1:markerPoints(1)
+    if (StefanReferenz{k,2}==0)
+        marker1.t(k) = hex2dec(StefanReferenz{k,1}(3:end));
+        marker1.d(k,:) = [StefanReferenz{k,3},StefanReferenz{k,4},StefanReferenz{k,5}];
     
-    marker2.t(k) = markersSave(k).timestamp;
-    marker2.d(k,:) = markersSave(k).markers(2,:);
+    elseif (StefanReferenz{k,2}==1)
+        marker2.t(k) = hex2dec(StefanReferenz{k,1}(3:end));
+        marker2.d(k,:) = [StefanReferenz{k,3},StefanReferenz{k,4},StefanReferenz{k,5}];
     
-    marker3.t(k) = markersSave(k).timestamp;
-    marker3.d(k,:) = markersSave(k).markers(3,:);
+    elseif(StefanReferenz{k,2}==2)
+        marker3.t(k) = hex2dec(StefanReferenz{k,1}(3:end));
+        marker3.d(k,:) = [StefanReferenz{k,3},StefanReferenz{k,4},StefanReferenz{k,5}];
+    end
 end
+%%
+marker1.d(~any(marker1.d,2),:) = [];
+marker2.d(~any(marker2.d,2),:) = [];
+marker3.d(~any(marker3.d,2),:) = [];
 
-[~, coeff] = pca(marker1.d);
-data.m2_1.marker1 = (marker1.t - marker1.t(1)) / MESSFREQUENZ_HZ;
-data.m2_1.marker1(:,2) = -coeff(:,1);
-
-[~, coeff] = pca(marker2.d);
-data.m2_1.marker2 = (marker2.t - marker2.t(1)) / MESSFREQUENZ_HZ;
-data.m2_1.marker2(:,2) = coeff(:,1);
-
-[~, coeff] = pca(marker3.d);
-data.m2_1.marker3 = (marker3.t - marker3.t(1)) / MESSFREQUENZ_HZ;
-data.m2_1.marker3(:,2) = coeff(:,1);
-
-%% 
-
-load('.\Aufnahmen\markers_Nase - Stefan.mat')
-
-marker1 = struct;
-marker2 = struct;
-marker3 = struct;
-
-marker1.t = zeros(length(markersSave), 1);
-marker1.d = zeros(length(markersSave), 3);
-
-marker2.t = zeros(length(markersSave), 1);
-marker2.d = zeros(length(markersSave), 3);
-
-marker3.t = zeros(length(markersSave), 1);
-marker3.d = zeros(length(markersSave), 3);
+marker1.t(~any(marker1.t,2),:) = [];
+marker2.t(~any(marker2.t,2),:) = [];
+marker3.t(~any(marker3.t,2),:) = [];
 
 
-for k = 1:length(markersSave)
-    marker1.t(k) = markersSave(k).timestamp;
-    marker1.d(k,:) = markersSave(k).markers(1,:);
-    
-    marker2.t(k) = markersSave(k).timestamp;
-    marker2.d(k,:) = markersSave(k).markers(2,:);
-    
-    marker3.t(k) = markersSave(k).timestamp;
-    marker3.d(k,:) = markersSave(k).markers(3,:);
-end
-
-[~, coeff] = pca(marker1.d);
-data.m2_2.marker1 = (marker1.t - marker1.t(1)) / MESSFREQUENZ_HZ;
-data.m2_2.marker1(:,2) = -coeff(:,1);
-
-[~, coeff] = pca(marker2.d);
-data.m2_2.marker2 = (marker2.t - marker2.t(1)) / MESSFREQUENZ_HZ;
-data.m2_2.marker2(:,2) = coeff(:,1);
-
-[~, coeff] = pca(marker3.d);
-data.m2_2.marker3 = (marker3.t - marker3.t(1)) / MESSFREQUENZ_HZ;
-data.m2_2.marker3(:,2) = -coeff(:,1);
-
-%% 
-
-load('.\Aufnahmen\markersForSven.mat')
-
-marker1 = struct;
-marker2 = struct;
-marker3 = struct;
-
-marker1.t = zeros(length(markersSave), 1);
-marker1.d = zeros(length(markersSave), 3);
-
-marker2.t = zeros(length(markersSave), 1);
-marker2.d = zeros(length(markersSave), 3);
-
-marker3.t = zeros(length(markersSave), 1);
-marker3.d = zeros(length(markersSave), 3);
-
-
-for k = 1:length(markersSave)
-    marker1.t(k) = markersSave(k).timestamp;
-    marker1.d(k,:) = markersSave(k).markers(1,:);
-    
-    marker2.t(k) = markersSave(k).timestamp;
-    marker2.d(k,:) = markersSave(k).markers(2,:);
-    
-    marker3.t(k) = markersSave(k).timestamp;
-    marker3.d(k,:) = markersSave(k).markers(3,:);
-end
 
 [~, coeff] = pca(marker1.d);
 data.eval.marker1 = (marker1.t - marker1.t(1)) / MESSFREQUENZ_HZ;
-data.eval.marker1(:,2) = -coeff(:,1);
+data.eval.marker1(:,2) = coeff(:,1);
 
 [~, coeff] = pca(marker2.d);
 data.eval.marker2 = (marker2.t - marker2.t(1)) / MESSFREQUENZ_HZ;
-data.eval.marker2(:,2) = -coeff(:,1);
+data.eval.marker2(:,2) = coeff(:,1);
 
 [~, coeff] = pca(marker3.d);
 data.eval.marker3 = (marker3.t - marker3.t(1)) / MESSFREQUENZ_HZ;
 data.eval.marker3(:,2) = coeff(:,1);
 
+clear StefanReferenz
 %% 
 
 save 'data' data
