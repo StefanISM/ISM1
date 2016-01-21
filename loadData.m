@@ -1,7 +1,7 @@
 
 
 %% 
-MESSFREQUENZ_HZ=335;
+MESSFREQUENZ_HZ=1;
 load('.\Michi.mat')
 
 marker1 = struct;
@@ -22,33 +22,40 @@ marker3.d = zeros(markerPoints(1), 3);
 
 for k = 1:markerPoints(1)
     if (Michi{k,9}==Michi{k,10} && Michi{k,2}==0)
-    marker1.t(k) = hex2dec(Michi{k,1}(3:end));
-    marker1.d(k,:) = [Michi{k,3},Michi{k,4},Michi{k,5}];
+        marker1.t(k) = hex2dec(Michi{k,1}(3:end));
+        marker1.d(k,:) = [Michi{k,3},Michi{k,4},Michi{k,5}];
     
     elseif (Michi{k,9}==Michi{k,10} && Michi{k,2}==1)
-    marker2.t(k) = hex2dec(Michi{k,1}(3:end));
-    marker2.d(k,:) = [Michi{k,3},Michi{k,4},Michi{k,5}];
+        marker2.t(k) = hex2dec(Michi{k,1}(3:end));
+        marker2.d(k,:) = [Michi{k,3},Michi{k,4},Michi{k,5}];
     
     elseif(Michi{k,9}==Michi{k,10} && Michi{k,2}==2)
-     marker3.t(k) = hex2dec(Michi{k,1}(3:end));
-    marker3.d(k,:) = [Michi{k,3},Michi{k,4},Michi{k,5}];
+        marker3.t(k) = hex2dec(Michi{k,1}(3:end));
+        marker3.d(k,:) = [Michi{k,3},Michi{k,4},Michi{k,5}];
     end
 end
 %%
+marker1.d(~any(marker1.d,2),:) = [];
+marker2.d(~any(marker2.d,2),:) = [];
+marker3.d(~any(marker3.d,2),:) = [];
 
-%ToDo: Nullzeilen löschen!
+marker1.t(~any(marker1.t,2),:) = [];
+marker2.t(~any(marker2.t,2),:) = [];
+marker3.t(~any(marker3.t,2),:) = [];
+
+
 
 [~, coeff] = pca(marker1.d);
-data.f1.marker1 = (marker1.t - marker1.t(1)) / MESSFREQUENZ_HZ;
-data.f1.marker1(:,2) = coeff(:,1);
+data.m1.marker1 = (marker1.t - marker1.t(1)) / MESSFREQUENZ_HZ;
+data.m1.marker1(:,2) = coeff(:,1);
 
 [~, coeff] = pca(marker2.d);
-data.f1.marker2 = (marker2.t - marker2.t(1)) / MESSFREQUENZ_HZ;
-data.f1.marker2(:,2) = coeff(:,1);
+data.m1.marker2 = (marker2.t - marker2.t(1)) / MESSFREQUENZ_HZ;
+data.m1.marker2(:,2) = coeff(:,1);
 
 [~, coeff] = pca(marker3.d);
-data.f1.marker3 = (marker3.t - marker3.t(1)) / MESSFREQUENZ_HZ;
-data.f1.marker3(:,2) = coeff(:,1);
+data.m1.marker3 = (marker3.t - marker3.t(1)) / MESSFREQUENZ_HZ;
+data.m1.marker3(:,2) = coeff(:,1);
 
 
 
